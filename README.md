@@ -16,17 +16,17 @@ The variables you'll need to change are:
 - $token (optional, for telegram notify)
 
 Get url is very easy, you can copy it from the top of the browser.
-Get xpath is a little harder, once you're in the webpage, you have to right click on it. Then you select "Inspect" option. Then, you'll see an item as next one:
+Get xpath is a little harder, once you're in the webpage, you have to right click on it. Then you select "Inspect" option. Then, you'll see an arrow item as next one (left):
 
-![This is an image](https://myoctocat.com/assets/images/base-octocat.svg)
+![Seelctor](https://github.com/arturo-source/check-webpage-change/blob/main/images/selector.png)
 
 Now you have to select the html item in the webpage, left click on that.
 
-![This is an image](https://myoctocat.com/assets/images/base-octocat.svg)
+![HTML selected](https://github.com/arturo-source/check-webpage-change/blob/main/images/html-selected.png)
 
 Then, the html code will have been marked, so your last step is to right click on it, and select "Copy" > "XPath"
 
-![This is an image](https://myoctocat.com/assets/images/base-octocat.svg)
+![Copy Xpath](https://github.com/arturo-source/check-webpage-change/blob/main/images/copy-xpath.png)
 
 The final step is pasting it on php script and you'll have the script configured. But now you have to set up the notify.
 
@@ -39,9 +39,9 @@ It's really easy too, if you've ever used Telegram. I asume you have telegram ac
 
 You will get a json like the next one:
   
-![This is an image](https://myoctocat.com/assets/images/base-octocat.svg)
+![Get ChatID](https://github.com/arturo-source/check-webpage-change/blob/main/images/get-chatid.png)
   
-Then you can pick the chatID and paste it in the php script too. And you'll have script totally configured. But now you have to decide how often you want to be notified.
+Then you can pick the Telegram ChatID and paste it in the php script too. And you'll have script totally configured. But now you have to decide how often you want to be notified.
   
 ### Set up crontab
 Crontab is a really usefull tool that you may have installed in your Linux computer or server. It helps you to do recurring tasks automatically. And it's really easy to set up, but your first time use may will be confusing. You can access [this page to configure crontab easily](https://crontab.guru/).
