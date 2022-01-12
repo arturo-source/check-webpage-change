@@ -16,7 +16,7 @@ The variables you'll need to change are:
 - $token (optional, for telegram notify)
 
 Get url is very easy, you can copy it from the top of the browser.
-Get xpath is a little harder, once you're in the webpage, you have to right click on it. Then you select "inspeccionar" option. Then, you'll see an item as next one:
+Get xpath is a little harder, once you're in the webpage, you have to right click on it. Then you select "Inspect" option. Then, you'll see an item as next one:
 
 ![This is an image](https://myoctocat.com/assets/images/base-octocat.svg)
 
@@ -35,7 +35,7 @@ It's really easy too, if you've ever used Telegram. I asume you have telegram ac
 1. Create a bot. (Talk to @BotFather, it will guide you)
 2. Copy bot token. (You can paste it now on php script, otherwise you will have to do it later)
 3. Talk your new bot. You can talk it directly, or create a group (or channel) with your friends and add the bot there.
-4. Access next url on your browser (don't forget change <token> for your token): https://api.telegram.org/bot<token>/getUpdates
+4. Access next url on your browser (don't forget change <token> for your token): [https://api.telegram.org/bot<token>/getUpdates](https://api.telegram.org/bot<token>/getUpdates)
 
 You will get a json like the next one:
   
