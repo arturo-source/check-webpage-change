@@ -1,0 +1,12 @@
+{
+    "url": "",
+    "check_changes": true,
+    "notify_telegram": true,
+    "chat_id": "",
+    "bot_token": "",
+    "xpaths": {
+      "Price": "/html/body/main/div[4]/.......",
+      "Units for sale": "/html/body/main/div[4]/.......",
+      "Page Title": "/html/head/title"
+    }
+  }
