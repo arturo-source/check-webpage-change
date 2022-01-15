@@ -20,7 +20,7 @@ function SendMessage($messaggio)
 
 function ReadJson($setup_filename)
 {
-    $json_content_str = file_get_contents($setup_filename);
+    $json_content_str = file_get_contents($setup_filename); // check error?
     $setup = json_decode($json_content_str, true);
 
     if (
@@ -48,14 +48,68 @@ function GetXpath($url)
     return new DOMXpath($doc);
 }
 
+function CheckChanges($xpaths)
+{
+    $changes_filename = "";
+    $last_check = file_get_contents($changes_filename);
+    $no_errors = file_put_contents($changes_filename, $xpaths); // change
+    if ($no_errors === false) {
+        exit("Unable to write changes in $changes_filename.");
+    }
+
+    $found_changes = false;
+
+    if ($last_check === false) {
+        // file not found
+        $xpaths = array_map(function ($elem) {
+            $elem["changed"] = true;
+            return $elem;
+        }, $xpaths);
+    } else {
+        // check if that changed or not
+        // $xpaths = array_map(function ($key, $elem) {
+        //     $elem["changed"] = true;
+        //     return $elem;
+        // }, $xpaths);
+    }
+
+    if($found_changes) {
+        return $xpaths;
+    } else {
+        return false;
+    }
+}
+
 function GenerateMessage($xpath)
 {
     global $setup;
     $msg = "";
 
-    foreach ($setup["xpaths"] as $key => $xpath_node) {
-        $node = $xpath->query($xpath_node);
-        $msg .= "$key: {$node[0]->nodeValue} \n";
+    if (isset($setup["check_changes"]) && $setup["check_changes"]) {
+        $xpaths = CheckChanges($setup["xpaths"]);
+        if ($xpaths === false) {
+            return "";
+        }
+        $msg = "Variables that changed:\n";
+        foreach ($xpaths as $key => $xpath_node) {
+            if ($xpath_node["changed"]) {
+                $node = $xpath->query($xpath_node);
+                $msg .= "$key: {$node[0]->nodeValue} \n";
+            }
+        }
+
+        $msg .= "\n\nVariables that didn't changed:\n";
+        foreach ($xpaths as $key => $xpath_node) {
+            if (!$xpath_node["changed"]) {
+                $node = $xpath->query($xpath_node);
+                $msg .= "$key: {$node[0]->nodeValue} \n";
+            }
+        }
+    } else {
+        foreach ($setup["xpaths"] as $key => $xpath_node) {
+            $node = $xpath->query($xpath_node);
+            $msg .= "$key: {$node[0]->nodeValue} \n";
+        }
     }
 
     return $msg;
@@ -64,4 +118,14 @@ function GenerateMessage($xpath)
 $setup = ReadJson("");
 $xpath = GetXpath($setup["url"]);
 $msg = GenerateMessage($xpath);
-SendMessage($msg);
+if ($msg != "" && $setup["notify_telegram"]) {
+    if (
+        !isset($setup["bot_token"]) || $setup["bot_token"] == ""
+        || !isset($setup["chat_id"]) || $setup["chat_id"] == ""
+    ) {
+        exit("chat_id and bot_token are necessary if you want to send changes by Telegram.");
+    }
+    SendMessage($msg);
+} else {
+    print($msg);
+}
