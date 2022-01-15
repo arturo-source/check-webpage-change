@@ -1,7 +1,7 @@
 <?php
 
 // function from https://stackoverflow.com/a/32875341
-function sendMessage($messaggio)
+function SendMessage($messaggio)
 {
     global $setup;
 
@@ -33,17 +33,35 @@ function ReadJson($setup_filename)
     return $setup;
 }
 
-$setup = ReadJson("");
+function GetXpath($url)
+{
+    $html = file_get_contents($url);
+    if ($html === false) {
+        exit("Request to $url failed.");
+    }
 
-$html = file_get_contents($setup["url"]);
-$doc  =    new DOMDocument();
-@$doc->loadHTML($html);
-$xpath = new DOMXpath($doc);
+    $doc = new DOMDocument();
+    if ($doc->loadHTML($html) === false) {
+        exit("Loading html failed.");
+    }
 
-$msg = "";
-foreach ($setup["xpaths"] as $key => $xpath_node) {
-    $node = $xpath->query($xpath_node);
-    $msg .= "$key: {$node[0]->nodeValue} \n";
+    return new DOMXpath($doc);
 }
 
-sendMessage($msg);
+function GenerateMessage($xpath)
+{
+    global $setup;
+    $msg = "";
+
+    foreach ($setup["xpaths"] as $key => $xpath_node) {
+        $node = $xpath->query($xpath_node);
+        $msg .= "$key: {$node[0]->nodeValue} \n";
+    }
+
+    return $msg;
+}
+
+$setup = ReadJson("");
+$xpath = GetXpath($setup["url"]);
+$msg = GenerateMessage($xpath);
+SendMessage($msg);
