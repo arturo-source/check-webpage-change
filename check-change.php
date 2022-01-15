@@ -1,5 +1,6 @@
 <?php 
 
+// function from https://stackoverflow.com/a/32875341
 function sendMessage($messaggio) {
     $chatID = "";
     $token = "";
@@ -18,13 +19,17 @@ function sendMessage($messaggio) {
 }
 
 $url = "";
-$xpath_node = "";
+$xpath_nodes = [];
 
 $html = file_get_contents($url);
 $doc  =	new DOMDocument();
 @$doc->loadHTML($html);
 $xpath = new DOMXpath($doc);
-$node = $xpath->query($xpath_node);
 
-sendMessage($node[0]->nodeValue);
-?>
+$msg = "";
+foreach ($xpath_nodes as $xpath_node) {
+    $node = $xpath->query($xpath_node);
+    $msg .= $node[0]->nodeValue . "\n";
+}
+
+sendMessage($msg);
