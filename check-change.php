@@ -20,9 +20,12 @@ function SendMessage($messaggio)
 
 function ReadJson($settings_filename)
 {
-    $json_content_str = file_get_contents($settings_filename); // check error?
-    $settings = json_decode($json_content_str, true);
+    $json_content_str = file_get_contents($settings_filename);
+    if ($json_content_str === false) {
+        exit("$json_content_str is missing.");
+    }
 
+    $settings = json_decode($json_content_str, true);
     if (
         $settings === null
         && json_last_error() !== JSON_ERROR_NONE
@@ -50,7 +53,9 @@ function GetXpath($url)
 
 function CheckChanges(object $xpath, array $xpaths)
 {
-    $changes_filename = "";
+    global $dir_path;
+
+    $changes_filename = $dir_path . "last_check.json";
     $found_changes = false;
     $nodes = array();
     $last_check = file_get_contents($changes_filename);
@@ -121,7 +126,8 @@ function GenerateMessage($xpath)
     return $msg;
 }
 
-$settings = ReadJson("settings.json");
+$dir_path = dirname(__FILE__) . "/";
+$settings = ReadJson($dir_path . "settings.json");
 $xpath = GetXpath($settings["url"]);
 $msg = GenerateMessage($xpath);
 if ($msg != "" && $settings["notify_telegram"]) {
