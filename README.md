@@ -59,7 +59,7 @@ Then you can pick the Telegram ChatID and paste it in the json settings too, rem
   
 ### Set up crontab
 Crontab is a really usefull tool that you may have installed in your Linux computer or server. It helps you to do recurring tasks automatically. And it's really easy to set up, but your first time use may will be confusing. You can access [this page to configure crontab easily](https://crontab.guru/).
-The most common option will be each day, at 12:00 for example, so you will type `0 12 * * *` next to the command. But maybe you want to execute it always you turn on the computer, then you will type `@reboot` next to the command.
+The most common option will be on Sunday, at 12:00 for example, so you will type `0 12 * * 0` next to the command. But maybe you want to execute it always you turn on the computer, then you will type `@reboot` next to the command.
  
 To open cron configuration you will open a terminal and type `crontab -e`, it allows you to edit cron configurations. You will open a file with an editor, it may will be `nano`. So you only have to paste the next command and let it be:
 ```
