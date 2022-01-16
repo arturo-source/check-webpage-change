@@ -3,9 +3,9 @@
 // function from https://stackoverflow.com/a/32875341
 function SendMessage($messaggio)
 {
-    global $setup;
+    global $settings;
 
-    $url = "https://api.telegram.org/bot" . $setup["bot_token"] . "/sendMessage?chat_id=" . $setup["chat_id"];
+    $url = "https://api.telegram.org/bot" . $settings["bot_token"] . "/sendMessage?chat_id=" . $settings["chat_id"];
     $url = $url . "&text=" . urlencode($messaggio);
     $ch = curl_init();
     $optArray = array(
@@ -18,19 +18,19 @@ function SendMessage($messaggio)
     return $result;
 }
 
-function ReadJson($setup_filename)
+function ReadJson($settings_filename)
 {
-    $json_content_str = file_get_contents($setup_filename); // check error?
-    $setup = json_decode($json_content_str, true);
+    $json_content_str = file_get_contents($settings_filename); // check error?
+    $settings = json_decode($json_content_str, true);
 
     if (
-        $setup === null
+        $settings === null
         && json_last_error() !== JSON_ERROR_NONE
     ) {
-        exit("$setup_filename is malformed.");
+        exit("$settings_filename is malformed.");
     }
 
-    return $setup;
+    return $settings;
 }
 
 function GetXpath($url)
@@ -90,11 +90,11 @@ function CheckChanges(object $xpath, array $xpaths)
 
 function GenerateMessage($xpath)
 {
-    global $setup;
+    global $settings;
     $msg = "";
 
-    if (isset($setup["check_changes"]) && $setup["check_changes"]) {
-        $nodes = CheckChanges($xpath, $setup["xpaths"]);
+    if (isset($settings["check_changes"]) && $settings["check_changes"]) {
+        $nodes = CheckChanges($xpath, $settings["xpaths"]);
         if ($nodes === false) {
             return "";
         }
@@ -112,7 +112,7 @@ function GenerateMessage($xpath)
             }
         }
     } else {
-        foreach ($setup["xpaths"] as $key => $xpath_node) {
+        foreach ($settings["xpaths"] as $key => $xpath_node) {
             $node = $xpath->query($xpath_node);
             $msg .= "$key: {$node[0]->nodeValue}\n";
         }
@@ -121,13 +121,13 @@ function GenerateMessage($xpath)
     return $msg;
 }
 
-$setup = ReadJson("");
-$xpath = GetXpath($setup["url"]);
+$settings = ReadJson("settings.json");
+$xpath = GetXpath($settings["url"]);
 $msg = GenerateMessage($xpath);
-if ($msg != "" && $setup["notify_telegram"]) {
+if ($msg != "" && $settings["notify_telegram"]) {
     if (
-        !isset($setup["bot_token"]) || $setup["bot_token"] == ""
-        || !isset($setup["chat_id"]) || $setup["chat_id"] == ""
+        !isset($settings["bot_token"]) || $settings["bot_token"] == ""
+        || !isset($settings["chat_id"]) || $settings["chat_id"] == ""
     ) {
         exit("chat_id and bot_token are necessary if you want to send changes by Telegram.");
     }
