@@ -49,7 +49,7 @@ It's really easy too, if you've ever used Telegram. I asume you have Telegram ac
 1. Create a bot. (Talk to @BotFather, it will guide you)
 2. Copy bot token. (You can paste it now on json settings, otherwise you will have to do it later)
 3. Talk your new bot. You can talk it directly, or create a group (or channel) with your friends and add the bot there.
-4. Access next url on your browser (don't forget change <token> with your token): [https://api.telegram.org/bot\<token\>/getUpdates](https://api.telegram.org/bot<token>/getUpdates)
+4. Access next url on your browser (don't forget change \<token\> with your token): [https://api.telegram.org/bot\<token\>/getUpdates](https://api.telegram.org/bot<token>/getUpdates)
 
 You will get a json like the next one:
   
