@@ -94,29 +94,27 @@ function GenerateMessage($xpath)
     $msg = "";
 
     if (isset($setup["check_changes"]) && $setup["check_changes"]) {
-        $xpaths = CheckChanges($xpath, $setup["xpaths"]);
-        if ($xpaths === false) {
+        $nodes = CheckChanges($xpath, $setup["xpaths"]);
+        if ($nodes === false) {
             return "";
         }
         $msg = "Variables that changed:\n";
-        foreach ($xpaths as $key => $xpath_node) {
-            if ($xpath_node["changed"]) {
-                $node = $xpath->query($xpath_node);
-                $msg .= "$key: {$node[0]->nodeValue} \n";
+        foreach ($nodes as $key => $node) {
+            if ($node["changed"]) {
+                $msg .= "$key: {$node['value']}\n";
             }
         }
 
         $msg .= "\n\nVariables that didn't change:\n";
-        foreach ($xpaths as $key => $xpath_node) {
-            if (!$xpath_node["changed"]) {
-                $node = $xpath->query($xpath_node);
-                $msg .= "$key: {$node[0]->nodeValue} \n";
+        foreach ($nodes as $key => $node) {
+            if (!$node["changed"]) {
+                $msg .= "$key: {$node['value']}\n";
             }
         }
     } else {
         foreach ($setup["xpaths"] as $key => $xpath_node) {
             $node = $xpath->query($xpath_node);
-            $msg .= "$key: {$node[0]->nodeValue} \n";
+            $msg .= "$key: {$node[0]->nodeValue}\n";
         }
     }
 
