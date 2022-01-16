@@ -44,7 +44,8 @@ function GetXpath($url)
     }
 
     $doc = new DOMDocument();
-    if ($doc->loadHTML($html) === false) {
+    // remove @ if you want to see ugly things
+    if (@$doc->loadHTML($html) === false) {
         exit("Loading html failed.");
     }
 
@@ -73,7 +74,7 @@ function CheckChanges(object $xpath, array $xpaths)
         // check whether changed or not
         foreach ($xpaths as $key => $xpath_node) {
             $node = $xpath->query($xpath_node);
-            $node_value = $node[0]->nodeValue;
+            $node_value = trim($node[0]->nodeValue);
             $changed = $prev_values[$key]["value"] != $node_value;
 
             $nodes[$key] = ["changed" => $changed, "value" => $node_value];
