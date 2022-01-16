@@ -120,7 +120,8 @@ function GenerateMessage($xpath)
     } else {
         foreach ($settings["xpaths"] as $key => $xpath_node) {
             $node = $xpath->query($xpath_node);
-            $msg .= "$key: {$node[0]->nodeValue}\n";
+            $node_value = trim($node[0]->nodeValue);
+            $msg .= "$key: $node_value\n";
         }
     }
 
